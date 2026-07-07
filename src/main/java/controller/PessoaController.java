@@ -1,27 +1,32 @@
 package com.example.trabalho2.controller;
 
+import com.example.trabalho2.dao.PessoaDAO;
+import com.example.trabalho2.model.Pessoa;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.example.trabalho2.model.Pessoa;
+
+import java.sql.SQLException;
 
 public class PessoaController {
 
-    private ObservableList<Pessoa> listaPessoas = FXCollections.observableArrayList();
+    private final PessoaDAO pessoaDAO = new PessoaDAO();
+    private final ObservableList<Pessoa> listaPessoas = FXCollections.observableArrayList();
 
-    public void salvarPessoa(
-            String nome,
-            String cpf,
-            String email,
-            String telefone) {
+    public void salvarPessoa(String nome, String cpf, String email, String telefone) throws SQLException {
+        Pessoa pessoa = new Pessoa(nome, cpf, email, telefone);
+        pessoaDAO.salvar(pessoa);
+    }
 
-        Pessoa pessoa = new Pessoa(
-                nome,
-                cpf,
-                email,
-                telefone
-        );
+    public void editarPessoa(Pessoa pessoa) throws SQLException {
+        pessoaDAO.editar(pessoa);
+    }
 
-        listaPessoas.add(pessoa);
+    public void excluirPessoa(Pessoa pessoa) throws SQLException {
+        pessoaDAO.excluir(pessoa);
+    }
+
+    public void listarPessoas() throws SQLException {
+        listaPessoas.setAll(pessoaDAO.listar());
     }
 
     public ObservableList<Pessoa> getListaPessoas() {
